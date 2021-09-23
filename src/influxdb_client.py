@@ -1,0 +1,46 @@
+import os
+import requests
+from datetime import datetime
+from typing import Optional
+
+class InfluxDbClient:
+    def __init__(self, url: str, token: str):
+        self._url = url
+        self._token = token
+
+    def _gen_query(self, key_name: str, db: str, rp: str, measurement: str, begin_datetime: Optional[datetime]=None, end_datetime: Optional[datetime]=None):
+        query = f"""
+        SELECT
+            {key_name}
+        FROM
+            {db}.{rp}.{measurement}
+        WHERE
+            1 = 1"""
+        if begin_datetime is not None:
+            query = "\n".join([query, f"            AND '{begin_datetime.isoformat()}' <= time"])
+        if end_datetime is not None:
+            query = "\n".join([query, f"            AND time < '{end_datetime.isoformat()}'"])
+        return query
+
+    
+    def get_data(self, key_name: str, db: str, rp: str, measurement: str, begin_datetime: Optional[datetime]=None, end_datetime: Optional[datetime]=None):
+        query = self._gen_query(key_name, db, rp, measurement, begin_datetime, end_datetime)
+
+        headers = {
+            "Authorization": f"Token {self._token}"
+        }
+        payloads = {
+            "db": db,
+            "q": query
+        }
+
+        response = requests.get(self._url, headers=headers, params=payloads)
+        return response.text.strip()
+
+if __name__ == "__main__":
+    client = InfluxDbClient(
+        "http://localhost:8086/query",
+        "pRJOjBGynGz3_ujxOSABmzB3YdafqiupA2YraFRO0JHO39-gaR0oRJXAZyUbkSQ4xWqWyoo3aDMGD3Oi6u03yg=="
+    )
+    data = client.get_data("temperature", "test_db", "test_rp", "medaka")
+    print(data)
