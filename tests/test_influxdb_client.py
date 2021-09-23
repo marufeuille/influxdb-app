@@ -5,7 +5,7 @@ import sys
 import pytest
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from influxdb_client import InfluxDbClient
+from src.influxdb_client import InfluxDbClient
 
 DIR_PATH = os.path.dirname(__file__)
 
