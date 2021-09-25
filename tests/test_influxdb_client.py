@@ -1,6 +1,7 @@
 import datetime
 import os
 import sys
+import json
 
 import pytest
 
@@ -29,7 +30,7 @@ def test_influxdb_client(mocker): # type: ignore
     client = InfluxDbClient("http://localhost:8086/query", "token")
     data = client.get_data("temperature", "test_db", "test_rp", "medaka")
 
-    assert data == response_text.strip()
+    assert data == json.loads(response_text.strip())
 
 
 query_test_parameters = [
