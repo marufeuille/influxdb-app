@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, Any
+import json
 
 import requests
 
@@ -17,7 +18,7 @@ class InfluxDbClient:
         measurement: str,
         begin_datetime: Optional[datetime] = None,
         end_datetime: Optional[datetime] = None,
-    ) -> str:
+    ) -> Dict[str, Any]:
         query = f"""
         SELECT
             {key_name}
@@ -52,4 +53,4 @@ class InfluxDbClient:
         payloads = {"db": db, "q": query}
 
         response = requests.get(self._url, headers=headers, params=payloads)
-        return response.text.strip()
+        return json.loads(response.text.strip())
