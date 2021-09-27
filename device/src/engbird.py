@@ -17,7 +17,7 @@ class EngbirdIBSTH1Sensor:
         self._characteristic_code = characteristic_code
 
     def get_sensor_data(self) -> SensorData:
-        now = datetime.now()
+        now = int(datetime.now().timestamp())
         try:
             if "_peripheral" not in self.__dict__.keys():
                 self._peripheral = btle.Peripheral(self._macaddr)

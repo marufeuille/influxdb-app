@@ -9,15 +9,15 @@ from sensor_status import SensorStatus
 class SensorData:
     status: SensorStatus
     name: str
-    humidity: Optional[float]
-    temperature: Optional[float]
     observed_timestamp: int
+    humidity: Optional[float]=None
+    temperature: Optional[float]=None
 
     def to_dict(self) -> Dict[str, Any]:
         dic: Dict[str, Any] = {
             "status": self.status.value,
             "name": self.name,
-            "observed_timestamp": int(self.observed_timestamp.timestamp()),  # type: ignore
+            "observed_timestamp": self.observed_timestamp
         }
         if self.humidity is not None:
             dic["humidity"] = self.humidity
