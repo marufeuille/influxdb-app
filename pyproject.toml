@@ -29,10 +29,10 @@ build-backend = "poetry.core.masonry.api"
 version = "0.9"
 
 [[tool.pysen.lint.mypy_targets]]
-  paths = ["src/"]
+  paths = ["src/", "device/src"]
 
 [tool.pysen.lint.source]
-  includes = ["src/"]
+  includes = ["src/", "device/src"]
 
 [tool.pysen.lint]
 enable_black = true

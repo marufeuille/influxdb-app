@@ -1,8 +1,9 @@
-from dataclasses import dataclass
-from typing import Optional
 import json
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 from sensor_status import SensorStatus
+
 
 @dataclass
 class SensorData:
@@ -12,12 +13,11 @@ class SensorData:
     temperature: Optional[float]
     observed_timestamp: int
 
-
-    def to_dict(self):
-        dic: Dict[str, str] = {
+    def to_dict(self) -> Dict[str, Any]:
+        dic: Dict[str, Any] = {
             "status": self.status.value,
             "name": self.name,
-            "observed_timestamp": int(self.observed_timestamp.timestamp())
+            "observed_timestamp": int(self.observed_timestamp.timestamp()),  # type: ignore
         }
         if self.humidity is not None:
             dic["humidity"] = self.humidity
@@ -25,5 +25,5 @@ class SensorData:
             dic["temperature"] = self.temperature
         return dic
 
-    def to_json(self):
+    def to_json(self) -> str:
         return json.dumps(self.to_dict())
